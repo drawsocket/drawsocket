@@ -8,6 +8,7 @@
     "start": "node ."
   },
   "author": "rama gottfried, hfmt hamburg",
+  "homepage": "https://drawsocket.github.io/",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
