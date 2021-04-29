@@ -42,7 +42,7 @@ let usr_template = in_template !== "default";
 let htmltemplate = usr_template ? in_template : '/lib/drawsocket-page.html' ;
 let infopage = "/lib/drawsocket-info.html";
 
-// load libaries
+// load libraries
 const cluster = require('cluster');
 
 if (cluster.isMaster) 
@@ -214,7 +214,7 @@ if (cluster.isMaster)
     * note that all wildcards are handled first and then specific names.
     * 
     * adding timetag for incoming dict since these are in sync
-    * then the cache will add the timetags into the interal objercts since these could have different start times
+    * then the cache will add the timetags into the internal objects since these could have different start times
     * 
     */
    
@@ -344,7 +344,7 @@ if (cluster.isMaster)
         
     });
 
-    // create OSC websockets from vanilla websockts, and add to clients list
+    // create OSC websockets from vanilla websockets, and add to clients list
     wss.on("connection", function (socket, req) {
 
         const uniqueid = req.headers['sec-websocket-key'];
@@ -528,12 +528,21 @@ if (cluster.isMaster)
      * API functions
      */
 
-    const setTemplate = (args) => {
-        htmltemplate = args;
+    /**
+     * 
+     * @param {String} template name of file to use for template (currently uses path relative to root folder)
+     */
+    const setTemplate = (template) => {
+        htmltemplate = template;
         usr_template = true;
-        post("set html template page to " + usr_root_path + args);
+        post("set html template page to " + usr_root_path + template);
     }
 
+    /**
+     * 
+     * @param {String} filename file name of JSON file to save, full path or relative to root folder
+     * @param {String} prefix optional OSC prefix to save only one client URL from the cached data
+     */
     const writeCache = (filename, prefix) => {
 
         post("attempting to save", filename, ( prefix ? prefix : "" )); 
@@ -545,6 +554,11 @@ if (cluster.isMaster)
         });
     }
 
+    /**
+     * 
+     * @param {String} filename file name of JSON file to load, full path or relative to root folder
+     * @param {String} prefix optional OSC prefix to save only one client URL from the cached data
+     */
     const importCache = (filename, prefix) => {
 
         if( !filename )
@@ -562,6 +576,10 @@ if (cluster.isMaster)
         });
     }
 
+    /**
+     * 
+     * @param {String} prefix OSC URL of client to ping, client returns connection information via send port
+     */
     const ping = (prefix) => {
         //console.log(prefix, prefix.length, Array.isArray(prefix) );
         for( const _prefix of prefix )
@@ -581,6 +599,11 @@ if (cluster.isMaster)
         }
     }
 
+    /**
+     * 
+     * @param {String} prefix sends message to client that it should request the cached state for its URL, used after loading new cache from disk.
+     * 
+     */
     const stateReq = (prefix) => {
         //post(prefix, prefix.length, Array.isArray(prefix) );
         for( const _prefix of prefix )
@@ -772,5 +795,17 @@ else if (cluster.isWorker)
         }
 
     });
+
+}
+
+
+module.exports = {
+
+    setTemplate,
+    writeCache,
+    importCache,
+    ping,
+    stateReq,
+    processInputObj
 
 }
