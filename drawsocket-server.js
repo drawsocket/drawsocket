@@ -96,7 +96,6 @@ app.use( compression() );
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// post("usr_path ", usr_root_path, userpath[0]);
 // these files are in the package not the user root_path
 app.use('/scripts', express.static(__dirname + '/node_modules/'));
 app.use('/lib', express.static(__dirname + '/lib/')); // client js and css files
@@ -651,9 +650,10 @@ process.on('unhandledRejection', (reason, p) => {
 
 
 const init = function(obj) {
-    if( typeof obj.htmltemplate != "undefined" )
+    if( typeof obj.htmltemplate != "undefined" && obj.htmltemplate !== params.htmltemplate )
     {
         params.usr_template = true;
+        // actually set in union below
     }
     
     params = {
@@ -663,7 +663,6 @@ const init = function(obj) {
 
     if (params.userpath != "default" ) {
         app.use( express.static( params.userpath ) );
-        
         usr_root_path = params.userpath + (params.userpath[params.userpath.length-1] != '/' ? '/' : '' );
         post("adding user html root path " + usr_root_path);
     }
@@ -679,9 +678,8 @@ const init = function(obj) {
     }
 }
 
-const startServer = function()
+const start = function()
 {
-    console.log("foo");
     // start server
     server.listen(params.http_port, () => {
         let port = server.address().port;
@@ -695,6 +693,8 @@ const startServer = function()
 
     if( params.enable_udp )
     {
+        console.log("starting udp server");
+
         udp_server.init( params.udp_listen_port, params.udp_send_port, params.udp_send_ip );
         if( params.outlet == "default" )
         {
@@ -737,7 +737,7 @@ module.exports = {
     ping,
     stateReq,
     processInputObj,
-    start: startServer,
+    start,
     stop,
     init
 

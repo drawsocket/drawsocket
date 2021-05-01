@@ -1,56 +1,29 @@
 
 const drawsocket = require('./drawsocket-server');
 
-drawsocket.start();
+const Max = require('max-api');
 
-
-/*
-  
 const argc = process.argv.length;
-const userpath = argc > 2 ? process.argv.slice(2) : __dirname;
+const userpath = argc > 2 ? process.argv[2] : __dirname;
+const http_port = argc > 3 ? Number(process.argv[3]) : 3003;
 const in_template = argc > 4 ? process.argv[4] : "default";
 
+let htmltemplate = in_template !== "default" ? in_template : '/lib/drawsocket-page.html' ;
+
+drawsocket.init({
+    post: Max.post,
+    outlet: Max.outlet,
+    userpath,
+    http_port,
+    htmltemplate
+});
 
 
-      let Max, post, outlet;
+Max.addHandler("html_template", (args) => drawsocket.setTemplate(args) );
+Max.addHandler("writecache", (filename, prefix) => drawsocket.writeCache(filename, prefix) );
+Max.addHandler("importcache", (filename, prefix) => drawsocket.importCache(filename, prefix) );
+Max.addHandler("ping", (...prefix) => drawsocket.ping(prefix) );
+Max.addHandler("statereq", (...prefix) => drawsocket.stateReq(prefix) );
+Max.addHandler(Max.MESSAGE_TYPES.DICT, (dict) => drawsocket.processInputObj(dict) );
 
-      try {
-          Max = require('max-api');
-          post = Max.post;
-          outlet = Max.outlet;
-  
-          post("started up ");
-          post(`pid: ${process.pid}`);
-          post(`running in ${process.env.NODE_ENV} mode`);
-      }
-      catch(err) 
-      {
-  
-          udp_server.init();
-  
-          post = console.log;
-          outlet = udp_server.send;
-  
-      }
-
-      
-      if( Max )
-      {
-          Max.addHandler("html_template", (args) => setTemplate(args) );
-  
-          Max.addHandler("writecache", (filename, prefix) => writeCache(filename, prefix) );
-          
-          Max.addHandler("importcache", (filename, prefix) => importCache(filename, prefix) );
-      
-          Max.addHandler("ping", (...prefix) => ping(prefix) );
-      
-          Max.addHandler("statereq", (...prefix) => stateReq(prefix) );
-          
-      
-          Max.addHandler(Max.MESSAGE_TYPES.DICT, (dict) => {
-              processInputObj(dict);
-          });
-      
-      }
-     
-     */
+drawsocket.start();
