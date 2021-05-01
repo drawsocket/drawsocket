@@ -21,7 +21,7 @@ const parseAsync = (obj_) => {
     });
 }
 
-function init(listenPort = 9999, sendPort_ = 7777)
+function init(listenPort = 9999, sendPort_ = 7777, sendIP = "127.0.0.1" )
 {
     sendPort = sendPort_;
 
