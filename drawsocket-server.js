@@ -49,13 +49,13 @@ cluster.setupMaster({
     exec: __dirname + '/drawsocket-cache-router.js'
 });
 
-
 let usr_root_path =  __dirname;
 
 let post = console.log;
 let outlet = (msg) => {};
 
 let params = {
+    node_path: "../..",
     userpath: "default",
     usr_template: false,
     htmltemplate: '/lib/drawsocket-page.html',
@@ -91,50 +91,62 @@ const wrapTimetag = (obj_, timetag_) => {
 
 
 
+function initPaths()
+{
 
-app.use( compression() );
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// these files are in the package not the user root_path
-app.use('/scripts', express.static(__dirname + '/node_modules/'));
-app.use('/lib', express.static(__dirname + '/lib/')); // client js and css files
-app.use('/fonts', express.static(__dirname + '/lib/fonts/')); // client js and css files
-
-// new system: use the same page for everything, and allow users to just set the OSC prefix by the URL
-app.use('*', (req, res) => {
-
-    if( !params.usr_template )
-    {
-        if (req.baseUrl == "")
-            res.sendFile(__dirname + params.infopage);
-        else
-            res.sendFile(__dirname + params.htmltemplate);
-    }
-    else
-    {
-        if (req.baseUrl == "")
-        {
-            res.sendFile( path.resolve( usr_root_path + params.infopage) );
-        }
-        else 
-        {
-            res.sendFile( path.resolve( usr_root_path +  params.htmltemplate) );
-        }
+    if ( params.userpath != "default" ) {
+        app.use( express.static( params.userpath ) );
+        usr_root_path = params.userpath + (params.userpath[params.userpath.length-1] != '/' ? '/' : '' );
+    
+        post("adding user html root path " + usr_root_path);
     }
     
-});
+    app.use( compression() );
+    
+    app.use(bodyParser.urlencoded({ extended: true }));
+    
+    // these files are in the package not the user root_path
+    app.use('/scripts', express.static(params.node_path));
 
-
-app.get('/', (req, res) => {
-    post('express connection ' + req + ' ' + res);
-});
-
-
-app.post('/form-post', (request, response) => {
-    outlet(request.body);
-    return response.send(request.body);
-});
+    app.use('/lib', express.static(__dirname + '/lib/')); // client js and css files
+    app.use('/fonts', express.static(__dirname + '/lib/fonts/')); // client js and css files
+    
+    // new system: use the same page for everything, and allow users to just set the OSC prefix by the URL
+    app.use('*', (req, res) => {
+    
+        if( !params.usr_template )
+        {
+            if (req.baseUrl == "")
+                res.sendFile(__dirname + params.infopage);
+            else
+                res.sendFile(__dirname + params.htmltemplate);
+        }
+        else
+        {
+            if (req.baseUrl == "")
+            {
+                res.sendFile( path.resolve( usr_root_path + params.infopage) );
+            }
+            else 
+            {
+                res.sendFile( path.resolve( usr_root_path +  params.htmltemplate) );
+            }
+        }
+        
+    });
+    
+    
+    app.get('/', (req, res) => {
+        post('express connection ' + req + ' ' + res);
+    });
+    
+    
+    app.post('/form-post', (request, response) => {
+        outlet(request.body);
+        return response.send(request.body);
+    });
+    
+}
 
 
 // var env = process.env.NODE_ENV || 'development';
@@ -661,12 +673,6 @@ const init = function(obj) {
         ...obj
     }
 
-    if (params.userpath != "default" ) {
-        app.use( express.static( params.userpath ) );
-        usr_root_path = params.userpath + (params.userpath[params.userpath.length-1] != '/' ? '/' : '' );
-        post("adding user html root path " + usr_root_path);
-    }
-
     if( params.post != "default" )
     {
         post = params.post;
@@ -676,6 +682,8 @@ const init = function(obj) {
     {
         outlet = params.outlet;
     }
+
+    initPaths();
 }
 
 const start = function()

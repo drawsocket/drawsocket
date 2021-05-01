@@ -1,6 +1,6 @@
 {
   "name": "drawsocket",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "server for synchronized browser display",
   "main": "drawsocket-server.js",
   "scripts": {
