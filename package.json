@@ -1,10 +1,10 @@
 {
   "name": "drawsocket",
-  "version": "0.0.4",
+  "version": "0.0.44",
   "description": "server for synchronized browser display",
   "main": "drawsocket-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node /test/index.js",
     "start": "node ."
   },
   "author": "rama gottfried, hfmt hamburg",

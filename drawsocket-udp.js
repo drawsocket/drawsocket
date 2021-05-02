@@ -24,7 +24,7 @@ const parseAsync = (obj_) => {
 function init(listenPort = 9999, sendPort_ = 7777, sendIP = "127.0.0.1" )
 {
     sendPort = sendPort_;
-
+    sendToIP = sendIP;
     udp_server = dgram.createSocket('udp4');
 
     udp_server.on('error', (err) => {
@@ -71,11 +71,11 @@ function send(msg)
        // console.error(`udp_server error, buffer too large ${bndl.length}`)
         udp_server.send( obj2osc({
             sendError: `udp_server error, buffer too large ${bndl.length}`
-        }), sendPort);
+        }), sendPort, sendToIP );
     }
     else
     {
-        udp_server.send( bndl, sendPort, (err) => {
+        udp_server.send( bndl, sendPort, sendToIP, (err) => {
             if( err ) console.error(`udp_server ${err} (size ${bndl.length})`);
           });
     }
