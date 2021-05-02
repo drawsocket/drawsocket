@@ -95,8 +95,9 @@ function initPaths()
 {
 
     if ( params.userpath != "default" ) {
-        app.use( express.static( params.userpath ) );
-        usr_root_path = params.userpath + (params.userpath[params.userpath.length-1] != '/' ? '/' : '' );
+        let usr_path_abosolute = path.normalize( path.isAbsolute(params.userpath) ? params.userpath : path.resolve('./', params.userpath) );
+        app.use( express.static( usr_path_abosolute ) );
+        usr_root_path = usr_path_abosolute + (usr_path_abosolute[usr_path_abosolute.length-1] != '/' ? '/' : '' );
     
         post("adding user html root path " + usr_root_path);
     }
@@ -106,7 +107,11 @@ function initPaths()
     app.use(bodyParser.urlencoded({ extended: true }));
     
     // these files are in the package not the user root_path
-    app.use('/scripts', express.static(params.node_path));
+    let modules_path = path.normalize( path.isAbsolute(params.node_path) ? params.node_path : path.resolve('./', params.node_path) );
+    post("adding scripts path " + modules_path);
+
+    // these files are in the package not the user root_path
+    app.use('/scripts', express.static(modules_path));
 
     app.use('/lib', express.static(__dirname + '/lib/')); // client js and css files
     app.use('/fonts', express.static(__dirname + '/lib/fonts/')); // client js and css files
