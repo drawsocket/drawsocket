@@ -39,12 +39,13 @@ Using the standalone UDP server, the [odot](https://github.com/CNMAT/CNMAT-odot/
 4. Initializing the server with the option `enable_udp` set to `true` starts the HTTP server with an additional UDP server which will listen for incoming `drawsocket` format OSC bundles and route them to the client browsers via WebSockets.
 5. See the [Overview](overview.html) and [API](api.html) pages for more details.
 
-Example script:
+Minimal example:
 
 ```
 const drawsocket = require('drawsocket');
 
 drawsocket.init({
+    node_path: './node_modules/',
     http_port: 3004,
     enable_udp: true,
     udp_listen_port: 9999,
