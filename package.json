@@ -1,10 +1,11 @@
 {
   "name": "drawsocket",
-  "version": "1.0.0",
+  "version": "0.0.4444",
   "description": "server for synchronized browser display",
   "main": "drawsocket-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node /test/index.js",
+    "dev": "node ./test/dev-index.js",
     "start": "node ."
   },
   "author": "rama gottfried, hfmt hamburg",
@@ -19,7 +20,6 @@
     "http": "0.0.0",
     "mixin-deep": "^2.0.1",
     "pdfjs-dist": "^2.7.570",
-    "startaudiocontext": "^1.2.1",
     "svg-points": "^6.0.1",
     "timesync": "^1.0.8",
     "timsort": "^0.3.0",
