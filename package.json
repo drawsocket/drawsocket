@@ -5,6 +5,7 @@
   "main": "drawsocket-server.js",
   "scripts": {
     "test": "node /test/index.js",
+    "dev": "node ./test/dev-index.js",
     "start": "node ."
   },
   "author": "rama gottfried, hfmt hamburg",

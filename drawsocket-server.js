@@ -50,14 +50,14 @@ cluster.setupMaster({
 });
 
 let usr_root_path =  __dirname;
+let usr_template = false;
 
 let post = console.log;
 let outlet = (msg) => {};
 
 let params = {
     node_path: "../..",
-    userpath: "default",
-    usr_template: false,
+    userpath: null,
     htmltemplate: '/lib/drawsocket-page.html',
     infopage: "/lib/drawsocket-info.html",
     http_port: 3002,
@@ -68,6 +68,7 @@ let params = {
     udp_send_port: 7777,
     udp_send_ip: "127.0.0.1"
 }
+
 
 const stringifyOBJAsync = (obj_) => {
     return Promise.resolve().then( ()=> JSON.stringify(obj_) );
@@ -94,10 +95,10 @@ const wrapTimetag = (obj_, timetag_) => {
 function initPaths()
 {
 
-    if ( params.userpath != "default" ) {
-        let usr_path_abosolute = path.normalize( path.isAbsolute(params.userpath) ? params.userpath : path.resolve('./', params.userpath) );
-        app.use( express.static( usr_path_abosolute ) );
-        usr_root_path = usr_path_abosolute + (usr_path_abosolute[usr_path_abosolute.length-1] != '/' ? '/' : '' );
+    if ( params.userpath ) {
+        let usr_path_absolute = path.normalize( path.isAbsolute(params.userpath) ? params.userpath : path.resolve('./', params.userpath) );
+        app.use( express.static( usr_path_absolute ) );
+        usr_root_path = usr_path_absolute + (usr_path_absolute[usr_path_absolute.length-1] != '/' ? '/' : '' );
     
         post("adding user html root path " + usr_root_path);
     }
@@ -108,7 +109,7 @@ function initPaths()
     
     // these files are in the package not the user root_path
     let modules_path = path.normalize( path.isAbsolute(params.node_path) ? params.node_path : path.resolve('./', params.node_path) );
-    post("adding scripts path " + modules_path);
+    post("setting node_modules path for client scripts " + modules_path);
 
     // these files are in the package not the user root_path
     app.use('/scripts', express.static(modules_path));
@@ -119,7 +120,7 @@ function initPaths()
     // new system: use the same page for everything, and allow users to just set the OSC prefix by the URL
     app.use('*', (req, res) => {
     
-        if( !params.usr_template )
+        if( !usr_template )
         {
             if (req.baseUrl == "")
                 res.sendFile(__dirname + params.infopage);
@@ -507,7 +508,7 @@ wss.on("connection", function (socket, req) {
  */
 const setTemplate = (template) => {
     params.htmltemplate = template;
-    params.usr_template = true;
+    usr_template = true;
     post("set html template page to " + usr_root_path + template);
 }
 
@@ -669,7 +670,7 @@ process.on('unhandledRejection', (reason, p) => {
 const init = function(obj) {
     if( typeof obj.htmltemplate != "undefined" && obj.htmltemplate !== params.htmltemplate )
     {
-        params.usr_template = true;
+        usr_template = true;
         // actually set in union below
     }
     

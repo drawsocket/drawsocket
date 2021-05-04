@@ -14,7 +14,7 @@ For use in Max, please use the [drawsocket-max](https://github.com/drawsocket/dr
 
 To install run: `npm install drawsocket`
 
-The `drawsocket` server can then be started by importing the module and running `start`.
+The `drawsocket` server can then be run by importing the module and running `start`. 
 
 Initializing the server with the option `enable_udp` set to `true` starts the HTTP server with an additional UDP server which will listen for incoming `drawsocket` format OSC bundles and route them to the client browsers via WebSockets.
 
@@ -36,3 +36,37 @@ drawsocket.start();
 
 Using the [odot](https://github.com/CNMAT/CNMAT-odot/releases/tag/1.3.0-rc.3) Pd library you can send `drawsocket` compatible OSC bundles.
 See also the `pd-communicate.pd` patch in the /example folder.
+
+# Server Options
+
+```
+let params = {
+    node_path: __dirname + '/node_modules/',    // path to node modules for client includes
+    userpath: null,                             // path for custom asset serving folder
+    htmltemplate: '/lib/drawsocket-page.html',  // sets main drawsocket page, /lib/drawsocket-page.html is the default
+    infopage: "/lib/drawsocket-info.html",      // sets landing page, /lib/drawsocket-info.html is the default
+    http_port: 3002,                            // sets HTTP port, 3002 by default
+    post: "default",                            // by default, console.log, otherwise settable to other print function (e.g. Max.post)
+    outlet: "default",                          // by default, if UDP is enabled outlet will be set to use udp_server.send, else disabled
+    enable_udp: false,                          // enable/disable UDP server, off by default
+    udp_listen_port: 9999,                      // UDP listen port
+    udp_send_port: 7777,                        // UDP send-to port
+    udp_send_ip: "127.0.0.1"                    // UDP send-to IP address
+}
+```
+
+# Test Server
+
+A test HTTP/UDP server can be run from within the `node_modules/drawsocket` folder, by running `node test`.
+
+Optional arguments set UDP send-to IP and port, for example: 
+
+```
+node test --ip=192.168.0.1 --port=4444
+```
+
+For testing `drawsocket` from the repository, use the `-d` flag to set the path to `node_modules`:
+
+```
+node test --ip=192.168.0.1 --port=4444 -d 
+```
