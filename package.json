@@ -1,11 +1,9 @@
 {
   "name": "drawsocket",
-  "version": "0.0.4444",
+  "version": "0.0.44444",
   "description": "server for synchronized browser display",
   "main": "drawsocket-server.js",
   "scripts": {
-    "test": "node /test/index.js",
-    "dev": "node ./test/dev-index.js",
     "start": "node ."
   },
   "author": "rama gottfried, hfmt hamburg",
