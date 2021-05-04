@@ -56,7 +56,7 @@ let post = console.log;
 let outlet = (msg) => {};
 
 let params = {
-    node_path: "../..",
+    node_path: "./..",
     userpath: null,
     htmltemplate: '/lib/drawsocket-page.html',
     infopage: "/lib/drawsocket-info.html",
