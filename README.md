@@ -8,7 +8,7 @@ Developed at the Hochschule für Musik und Theater Hamburg in 2019 for a series 
 For more information, please see the documentation website at [drawsocket.github.io](https://drawsocket.github.io/)
 
 # Use in Max
-For use in Max, please use the [drawsocket-max](https://github.com/drawsocket/drawsocket-max) Max package.
+For use in Max, please refer to the [drawsocket-max](https://github.com/drawsocket/drawsocket-max) Max package.
 
 # Basic usage in UDP mode
 
