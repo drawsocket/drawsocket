@@ -49,7 +49,7 @@ cluster.setupMaster({
     exec: __dirname + '/drawsocket-cache-router.js'
 });
 
-let usr_root_path =  __dirname;
+let usr_root_path =  __dirname + "/";
 let usr_template = false;
 
 let post = console.log;
@@ -250,18 +250,14 @@ const processInputObj = function(in_obj) {
             switch( k )
             {
                 case "writecache":
-                    if( args.length == 1 )
-                        writeCache(args);
-                    else if( args.length == 2 )
-                        writeCache(args[0], args[1]);
+                    if( args.length > 0 )
+                        writeCache(...args);
                     else
                         writeCache('saved_cache.json')
                 break;
                 case "importcache":
-                    if( args.length == 1 )
-                        importCache(args)
-                    else if( args.length == 2 )
-                        importCache(args[0], args[1])
+                    if( args.length > 0 )
+                        importCache(...args)
                     else
                         post("error, no file specified for importcache");
                 break;
@@ -521,7 +517,7 @@ const setTemplate = (template) => {
 const writeCache = (filename, prefix) => {
 
     post("attempting to save", filename, ( prefix ? prefix : "" )); 
-    
+    post('usr_root_path', usr_root_path);
     cache_proc.send({
         key: 'write',
         url: prefix,
