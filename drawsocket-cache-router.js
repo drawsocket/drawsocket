@@ -12,7 +12,8 @@ process.on("message", (_msg) => {
             {
                 process.send({
                     url: _msg.url,
-                    val: _state
+                    val: _state,
+                    clientInfo: (typeof _msg.clientInfo != "undefined" ? _msg.clientInfo : null)
                 });
             }
             else

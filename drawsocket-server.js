@@ -365,7 +365,8 @@ wss.on("connection", function (socket, req) {
             {
                 cache_proc.send({
                     key: 'get',
-                    url: _url
+                    url: _url,
+                    clientInfo
                 });
                 
             }
@@ -732,7 +733,10 @@ cache_proc.on('message', (msg)=> {
 
     if( msg.url )
     {
-        clients.sendToClientsURL(msg.url, msg.val);
+        if( msg.clientInfo )
+            clients.sendToClientUnique(msg.clientInfo, msg.val);
+        else
+            clients.sendToClientsURL(msg.url, msg.val);
     }
     else if( msg.output )
     {

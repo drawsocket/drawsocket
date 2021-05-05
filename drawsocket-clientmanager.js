@@ -122,6 +122,29 @@ class ClientManager {
 
     }
 
+    sendToClientUnique( clientInfo, _jsonstring )
+    {
+
+      if( this.ids.hasOwnProperty(clientInfo.url) )
+      {
+
+        const sock = this.sockets.get(clientInfo.uniqueid);
+
+        if( sock && sock.readyState === WebSocket.OPEN )
+        {
+          sock.send( _jsonstring );
+        }
+        else if ( sock.readyState > 1 )
+        {
+          console.log("trying to send to client that doesn't exist and I don't know the url to remove!")
+        }
+        
+
+      }
+
+    }
+
+
     sendToALL( _jsonstring )
     {
       //console.log('send', _jsonstring);
