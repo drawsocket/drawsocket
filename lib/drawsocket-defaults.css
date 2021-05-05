@@ -129,6 +129,25 @@ g {
   font-size: 18px;
 }
 
+#click_to_start {
+  width: 100vw;
+  height: 100vh;
+  background-color: pink;
+  display: none;
+  z-index: 200;
+}
+
+#click_to_start p {
+  margin: 0;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  font-family: courier;
+  font-size: 18px;
+}
+
 @keyframes fadeout {
   0% { opacity: 1; }
   50% { opacity: 0.1; }
