@@ -95,12 +95,22 @@ const wrapTimetag = (obj_, timetag_) => {
 function initPaths()
 {
 
-    if ( params.userpath ) {
+    if ( params.userpath ) 
+    {
         let usr_path_absolute = path.normalize( path.isAbsolute(params.userpath) ? params.userpath : path.resolve('./', params.userpath) );
-        app.use( express.static( usr_path_absolute ) );
-        usr_root_path = usr_path_absolute + (usr_path_absolute[usr_path_absolute.length-1] != '/' ? '/' : '' );
-    
-        post("adding user html root path " + usr_root_path);
+        
+        if( fs.existsSync(usr_path_absolute) )
+        {
+            app.use( express.static( usr_path_absolute ) );
+            usr_root_path = usr_path_absolute + (usr_path_absolute[usr_path_absolute.length-1] != '/' ? '/' : '' );
+        
+            post("adding user html root path " + usr_root_path);
+        }
+        else
+        {
+            post(">>>>> user path not found! <<<<< \n unable to set folder: " + usr_path_absolute + " -- please check your folder path");
+        }
+
     }
     
     app.use( compression() );
